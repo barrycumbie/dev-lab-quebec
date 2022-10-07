@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const { urlencoded } = require('body-parser');
 const MongoClient = require('mongodb').MongoClient
 const app = express();
+const { ObjectId } = require('mongodb');
 
 dotenv.config({path:'config.env'});
 
@@ -64,10 +65,10 @@ MongoClient.connect(process.env.MONGO_URI, {
     //       });
     // })
 
-    app.post('/deletePlayer/:name', async (req,res)=>{
+    app.post('/deletePlayer/:id', async (req,res)=>{
       
-      // console.log("id", req.params.id); 
-      console.log("name", req.params.name); 
+      console.log("id", req.params.id); 
+      // console.log("name", req.sparams.name); 
 
       let result = await playersCollection.findOneAndDelete( 
         {
@@ -76,8 +77,15 @@ MongoClient.connect(process.env.MONGO_URI, {
         // "_id": "ObjectId(\"6340b4a0716efae98339f1d7\")"
         // "_id" : "ObjectId(6340b4a0716efae98339f1d7)"
         // _id : req.params.id
-        name :  req.params.name
-        // _id: new ObjectId("6340b4a0716efae98339f1d7")
+        // name :  req.params.name
+        // "_id" :  `ObjectId('${req.params.id}')`
+        // _id :  ObjectId('${req.params.id}')
+        // "_id" : "6340ba72e3120ac27bd0ea9c"
+        // "_id.$oid" : "6340ba72e3120ac27bd0ea9c"
+        "_id": ObjectId(req.params.id)
+
+        // name : "adfs"
+
        }
       )
       .then(result => {
