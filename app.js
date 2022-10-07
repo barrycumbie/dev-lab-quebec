@@ -40,9 +40,9 @@ MongoClient.connect(process.env.MONGO_URI, {
           .catch(error => console.error(error))
       })
 
-      app.post('/players', (req,res) => {
-          console.log(req.body);
-      })
+      // app.post('/players', (req,res) => {
+      //     console.log(req.body);
+      // })
 
     //   app.delete('/players/:id', (req,res)=>{
     //     const id=req.params.id;
@@ -64,14 +64,28 @@ MongoClient.connect(process.env.MONGO_URI, {
     //       });
     // })
 
-    app.delete('/players', (req,res)=>{
-      playersCollection.findOneAndDelete(
-        {id: req.body.id}
+    app.post('/deletePlayer/:name', async (req,res)=>{
+      
+      // console.log("id", req.params.id); 
+      console.log("name", req.params.name); 
+
+      let result = await playersCollection.findOneAndDelete( 
+        {
+        // _id : `"ObjectId("${req.params.id}")"`
+        // "_id": ObjectId("6340b4a0716efae98339f1d7")
+        // "_id": "ObjectId(\"6340b4a0716efae98339f1d7\")"
+        // "_id" : "ObjectId(6340b4a0716efae98339f1d7)"
+        // _id : req.params.id
+        name :  req.params.name
+        // _id: new ObjectId("6340b4a0716efae98339f1d7")
+       }
       )
-      // .then(result => {
-      //   res.json(`Deleted Darth Vader's quote`)
-      // })
-      // .catch(error => console.error(error))
+      .then(result => {
+        //res.json(`Deleted Darth Vader's quote`)
+        console.log(result); 
+        res.redirect('/');
+      })
+      .catch(error => console.error(error))
     })
 
       app.listen(3000, function() {

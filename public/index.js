@@ -22,7 +22,7 @@ $(".delete").click(function(){
   console.log("delete buttong clicked");
   var id = $(this).attr("id");
   console.log(id);
-  fetch(`players/${id}`, {
+  fetch(`players/player_id:${id}`, {
     method:"delete",
     headers: {'Content-Type': 'applications/json'}
   })
